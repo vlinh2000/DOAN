@@ -216,12 +216,29 @@ public void updateNV(Connection conn) {
 }
 
 
-
-
-
-
-
-
+public void findNV(Connection conn) {
+	System.out.print("Nhập mã nhân viên cần tìm: ");
+	Scanner sc1 = new Scanner(System.in);
+	this.maNV = sc1.nextLine();
+	try {
+		Statement stmt = conn.createStatement();
+		String sql ="select * from NHANVIEN a where a.MANV = '"+this.maNV+"'";
+		ResultSet rs = stmt.executeQuery(sql);
+		while(rs.next()) {
+		 maNV =rs.getString("MANV");
+		 tenNV =rs.getString("TENNV");
+		 gioiTinh =rs.getString("GIOITINH");
+		 chucVu =rs.getString("CHUCVU");
+		 ngayVaoLam=rs.getString("NGAY_VAO_LAM");
+		 diaChi =rs.getString("DIACHI");
+		 sdt =rs.getString("SDT");
+		 System.out.println(tenNV+"\t"+gioiTinh+"\t"+chucVu+"\t"+ngayVaoLam+ "\t"+diaChi+"\t"+sdt);
+		}
+	}catch(Exception e){
+		System.out.println("ERR:" +e);
+		System.out.println("Thực thi không  thành công");
+	}
+}
 
 
 
