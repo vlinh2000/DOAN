@@ -36,14 +36,22 @@ public class HoaDon {
 			Statement stmt = conn.createStatement();
 			String sql ="select a.MAHDBH,b.TENNV,a.NGAYLAPHD,c.TENBAN,a.TONGTIEN from HDBANHANG a,nhanvien b,BAN c where a.MANV = b.MANV and a.MABAN=c.MABAN ";
 			ResultSet rs = stmt.executeQuery(sql);
+			System.out.println("");
+			System.out.println("Danh sách hóa đơn  ");
+			System.out.println("");
+			 System.out.println("|---------|----------------------|----------------------|-----------|-----------|");
+			 System.out.println("| Mã HDBH |       Tên NV         |     Ngày lập HD      |  Tên Bàn  | Tổng Tiền |");
+			 System.out.println("|---------|----------------------|----------------------|-----------|-----------|");
 			while(rs.next()) {
 		   String MAHDBH =rs.getString("MAHDBH");
 		   String tenNV =rs.getString("TENNV");	
 		   this.ngayLap =rs.getString("NGAYLAPHD");
 		   String tenBan =rs.getString("TENBAN");
 			 this.tongTien =rs.getString("TONGTIEN");
-			System.out.println(MAHDBH+"\t"+tenNV+"\t"+this.ngayLap+"\t"+tenBan+"\t"+this.tongTien+" VND");
+			 System.out.format("|%-9s|%-22s|%-22s|%-11s|%-11s|",MAHDBH,tenNV,ngayLap,tenBan,tongTien);
+			 System.out.println("");
 			}
+			System.out.println("|---------|----------------------|----------------------|-----------|-----------|");
 		}catch(Exception e){
 			System.out.println("ERR:" +e);
 			System.out.println("Thực thi không  thành công");

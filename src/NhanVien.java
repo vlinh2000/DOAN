@@ -16,6 +16,12 @@ public void getAllNV(Connection conn) {
 			Statement stmt = conn.createStatement();
 			String sql ="select * from NhanVien";
 			ResultSet rs = stmt.executeQuery(sql);
+			System.out.println("");
+			System.out.println("Danh sách nhân viên  ");
+			System.out.println("");
+			 System.out.println("|-------|----------------------|-----------|-----------|--------------|--------------------|------------|");
+			 System.out.println("| Mã NV |       Tên NV         | Giới tính |  Chức vụ  | Ngày vào làm |       Địa chỉ      |     SĐT    |");
+			 System.out.println("|-------|----------------------|-----------|-----------|--------------|--------------------|------------|");
 			while(rs.next()) {
 			 maNV =rs.getString("MANV");
 			 tenNV =rs.getString("TENNV");
@@ -24,9 +30,11 @@ public void getAllNV(Connection conn) {
 			 ngayVaoLam=rs.getString("NGAY_VAO_LAM");
 			 diaChi =rs.getString("DIACHI");
 			 sdt =rs.getString("SDT");
-			 System.out.println("---------------------------");
-			System.out.println(maNV +"\t"+tenNV+"\t"+gioiTinh+"\t"+chucVu+"\t"+ngayVaoLam+ "\t"+diaChi+"\t"+sdt); 
+			  System.out.format("|%-7s|%-22s|%-11s|%-11s|%-14s|%-20s|%-12s|",maNV,tenNV,gioiTinh,chucVu,ngayVaoLam,diaChi,sdt);
+			 System.out.println("");
 			}
+			 System.out.println("|-------|----------------------|-----------|-----------|--------------|--------------------|------------|");
+			 System.out.println("");
 		}catch(Exception e){
 			System.out.println("ERR:" +e);
 			System.out.println("Thực thi không  thành công");
@@ -37,12 +45,21 @@ public void getLuongNV(Connection conn) {
 			Statement stmt = conn.createStatement();
 			String sql ="select a.MANV, b.TENNV,a.THANHTIEN from LUONGNV a, NHANVIEN b where a.MANV = b.MANV";
 			ResultSet rs = stmt.executeQuery(sql);
+			System.out.println("");
+			System.out.println("Bảng lương nhân viên  ");
+			System.out.println("");
+			 System.out.println("|-------|----------------------|------------|");
+			 System.out.println("| Mã NV |       Tên NV         |   Lương    |");
+			 System.out.println("|-------|----------------------|------------|");
 			while(rs.next()) {
 			 maNV =rs.getString("MANV");
 			 tenNV = rs.getString("TENNV");
 			 tienluong =rs.getString("THANHTIEN");
-			System.out.println(maNV +"\t"+tenNV+"\t"+tienluong); 
+			 tienluong+=" VND";
+			  System.out.format("|%-7s|%-22s|%-12s|",maNV,tenNV,tienluong);
+			  System.out.println("");
 			}
+			 System.out.println("|-------|----------------------|------------|");
 		}catch(Exception e){
 			System.out.println("ERR:" +e);
 			System.out.println("Thực thi không  thành công");
@@ -83,6 +100,8 @@ public void insertNV(Connection conn) {
 	this.diaChi = sc.nextLine();
 	System.out.println("Nhập số điện thoại nhân viên: ");
 	this.sdt = sc.nextLine();
+	System.out.println("Nhập tiền lương nhân viên: ");
+	this.tienluong = sc.nextLine();
 	try {
 		
 		PreparedStatement stmt = conn.prepareStatement("insert into NhanVien values(?,?,?,?,?,?,?)");
@@ -94,6 +113,12 @@ public void insertNV(Connection conn) {
         stmt.setString(6,this.diaChi);
         stmt.setString(7,this.sdt);
         stmt.executeUpdate();
+        
+        PreparedStatement stmt1 = conn.prepareStatement("insert into LUONGNV values(?,?)");
+        stmt1.setString(1,this.maNV);
+        stmt1.setString(2,this.tienluong);
+        stmt1.executeUpdate();
+        
 		System.out.println("Thêm nhân viên thành công!"); 
 	}catch(Exception e){
 		System.out.println("ERR:" +e);
@@ -180,6 +205,11 @@ public void deleteNV(Connection conn) {
 	System.out.print("Nhập mã nhân viên cần xóa: ");
 	Scanner sc1 = new Scanner(System.in);
 	this.maNV = sc1.nextLine();
+	System.out.println("Bạn có chắc chắn muốn xóa nhân viên có mã "+this.maNV+" ?");
+	System.out.println("[1]. Có          [2]. Không");
+	System.out.print("> ");
+	int c = sc1.nextInt();
+	if(c==1) {
 try {
 		
 		PreparedStatement stmt = conn.prepareStatement("delete from NHANVIEN where MANV = ?");
@@ -190,14 +220,18 @@ try {
 		System.out.println("ERR:" +e);
 		System.out.println("Thực thi không  thành công");
 	}
+} else this.updateNV(conn);
 }
+	
 
 public void updateNV(Connection conn) {
+	QuanLyCaFe a = new QuanLyCaFe();
 	System.out.println("------------------------");
-	System.out.println("1. Thêm nhân viên");
-	System.out.println("2. Sửa nhân viên");
-	System.out.println("3. Xóa nhân viên");
-	System.out.println("4. Quay lại");	
+	System.out.println("[1]. Thêm nhân viên");
+	System.out.println("[2]. Sửa nhân viên");
+	System.out.println("[3]. Xóa nhân viên");
+	System.out.println("[4]. Quay lại");
+	System.out.print("> ");	
 	Scanner sc = new Scanner(System.in);
 	int x = sc.nextInt();
 	switch(x) {
@@ -209,9 +243,12 @@ public void updateNV(Connection conn) {
 	
 	}
 		break;
-	case 3: this.deleteNV(conn);
+	case 3: {this.deleteNV(conn);
 		break;
 	}
+		default: a.showMenu();
+	}
+	
 	
 }
 
@@ -220,20 +257,25 @@ public void findNV(Connection conn) {
 	System.out.print("Nhập mã nhân viên cần tìm: ");
 	Scanner sc1 = new Scanner(System.in);
 	this.maNV = sc1.nextLine();
+	System.out.println("");
+	 System.out.println("|----------------------|-----------|-----------|--------------|--------------------|------------|");
+	 System.out.println("|       Tên NV         | Giới tính |  Chức vụ  | Ngày vào làm |       Địa chỉ      |     SĐT    |");
+	 System.out.println("|----------------------|-----------|-----------|--------------|--------------------|------------|");
 	try {
 		Statement stmt = conn.createStatement();
 		String sql ="select * from NHANVIEN a where a.MANV = '"+this.maNV+"'";
 		ResultSet rs = stmt.executeQuery(sql);
 		while(rs.next()) {
-		 maNV =rs.getString("MANV");
 		 tenNV =rs.getString("TENNV");
 		 gioiTinh =rs.getString("GIOITINH");
 		 chucVu =rs.getString("CHUCVU");
 		 ngayVaoLam=rs.getString("NGAY_VAO_LAM");
 		 diaChi =rs.getString("DIACHI");
 		 sdt =rs.getString("SDT");
-		 System.out.println(tenNV+"\t"+gioiTinh+"\t"+chucVu+"\t"+ngayVaoLam+ "\t"+diaChi+"\t"+sdt);
+		 System.out.format("|%-22s|%-11s|%-11s|%-14s|%-20s|%-12s|",tenNV,gioiTinh,chucVu,ngayVaoLam,diaChi,sdt);
+		 System.out.println("");
 		}
+		System.out.println("|----------------------|-----------|-----------|--------------|--------------------|------------|");
 	}catch(Exception e){
 		System.out.println("ERR:" +e);
 		System.out.println("Thực thi không  thành công");

@@ -8,32 +8,41 @@ public static void main(String[] args) {
 }
 
 public static void showMenu(){
-	System.out.println("Danh sách chức năng");
-	System.out.println("1. Hiển thị danh sách nhân viên ");
-	System.out.println("2. Hiển thị bản lương nhân viên");
-	System.out.println("3. Cập nhật nhân viên");
-	System.out.println("4. Hiển thị danh sách nhà cung cấp");
-	System.out.println("5. Hiển thị danh sách bàn");
-	System.out.println("6. Tìm nhân viên");
-	System.out.println("7. Thống kê doanh thu theo tháng");
-	System.out.println("8. Hiển thị hàng hóa theo loại");
-	System.out.println("9. Lập hóa đơn");
-	System.out.println("10. Hiển thị danh sách hóa đơn");
-	System.out.println("11. Thoát");
+	System.out.println("");
+	System.out.println("[1]. Hiển thị danh sách nhân viên ");
+	System.out.println("[2]. Hiển thị bản lương nhân viên");
+	System.out.println("[3]. Cập nhật nhân viên");
+	System.out.println("[4]. Hiển thị danh sách nhà cung cấp");
+	System.out.println("[5]. Hiển thị danh sách bàn");
+	System.out.println("[6]. Tìm nhân viên");
+	System.out.println("[7]. Thống kê doanh thu theo tháng");
+	System.out.println("[8]. Hiển thị hàng hóa theo loại");
+	System.out.println("[9]. Lập hóa đơn");
+	System.out.println("[10]. Hiển thị danh sách hóa đơn");
+	System.out.println("[11]. Thoát");
+	System.out.println("");
 	System.out.println("Mời bạn lựa chọn chức năng: ");
+	System.out.print("> ");
 	Scanner sc = new Scanner(System.in);
 	int ans=sc.nextInt();
 	checkAnswer(ans);
+	
 } 
 
 public static void backOp() {
 	System.out.println("");
-	System.out.println("1. Quay lại menu                  2. Thoát");
+	boolean choose = true;
+	System.out.println("[1]. Quay lại menu             [2]. Thoát");
+	while(choose) {
 	System.out.print("> ");
 	Scanner sc = new Scanner(System.in);
 	int back =sc.nextInt();
-	if(back == 1) showMenu();
-	else return;
+	if(back == 1) {
+		choose = false;
+		showMenu();
+		}
+	else System.out.println("Chức năng không tồn tại, vui lòng nhập lại ");
+	}
 	
 }
 public static void exit() {
@@ -82,7 +91,14 @@ public static void checkAnswer(int ans) {
     break;
 	case 11: exit();
     break;
-	}
+    default: {
+    	System.out.println("Chức năng không tồn tại, mời bạn chọn lại: ");
+    	System.out.print("> ");
+    	Scanner sc = new Scanner(System.in);
+    	int ans1=sc.nextInt();
+    	checkAnswer(ans1);
+    }
+}
 	//close Connection!
 	conn.closeConnect();
 }
