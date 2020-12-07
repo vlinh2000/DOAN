@@ -15,7 +15,7 @@ public Connection getConnection() {
 public void connect() {
 	 try {
 		 Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-		 String connString ="jdbc:mysql://127.0.0.1/QLCF?user=root&password=190220";
+		 String connString ="jdbc:mysql://127.0.0.1/QLCF?user=root&password=190220&useUnicode=true&characterEncoding=UTF-8";
 		 conn=DriverManager.getConnection(connString);
 		//System.out.println("Nối kết thành công"); 
 		

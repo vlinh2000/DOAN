@@ -41,7 +41,9 @@ public static void backOp() {
 		choose = false;
 		showMenu();
 		}
-	else System.out.println("Chức năng không tồn tại, vui lòng nhập lại ");
+	else if(back==2) {exit(); 
+	break;}
+		else System.out.println("Chức năng không tồn tại, vui lòng nhập lại ");
 	}
 	
 }
@@ -66,7 +68,6 @@ public static void checkAnswer(int ans) {
 			backOp();
 	break;
 	case 3: list.updateNV(conn.getConnection());//test new class connection
-			backOp();
 	break;
 	case 4: ncc.showNCC(conn.getConnection());//test new class connection
 			backOp();

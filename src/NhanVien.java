@@ -210,8 +210,18 @@ public void deleteNV(Connection conn) {
 	System.out.print("> ");
 	int c = sc1.nextInt();
 	if(c==1) {
-try {
-		
+try {   
+	  
+	  Statement stmt0 = conn.createStatement();
+			String sql ="select * from NHANVIEN a where a.MANV ='"+this.maNV+"'";
+			ResultSet rs = stmt0.executeQuery(sql);
+			if(!rs.next()) {
+				 System.out.println("Nhân viên có mã "+this.maNV+" không tồn tại! Mời thực hiện lại ");
+				 deleteNV(conn);
+			}				
+	    PreparedStatement stmt1 = conn.prepareStatement("delete from LUONGNV where MANV = ?");
+	    stmt1.setString(1,this.maNV);
+	    stmt1.executeUpdate();
 		PreparedStatement stmt = conn.prepareStatement("delete from NHANVIEN where MANV = ?");
 		stmt.setString(1,this.maNV);
 		stmt.executeUpdate();
@@ -236,14 +246,16 @@ public void updateNV(Connection conn) {
 	int x = sc.nextInt();
 	switch(x) {
 	case 1 : this.insertNV(conn);
+	  a.backOp();
 		break; 
 	case 2: {
 		this.getAllNV(conn);
 		this.update(conn);
-	
-	}
-		break;
+	  a.backOp();
+	  break;
+	}	
 	case 3: {this.deleteNV(conn);
+	a.backOp();
 		break;
 	}
 		default: a.showMenu();
